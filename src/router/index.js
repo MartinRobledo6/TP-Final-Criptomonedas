@@ -1,12 +1,22 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      
+      path: '/',
+      redirect: '/compras'
     },
+    {
+      path: '/clientes',
+      name: 'clientes',
+      component: () => import('../views/AltaClientes.vue')
+    },
+    {
+      path: '/compras',
+      name: 'compras',
+      component: () => import('../views/AltaCompra.vue')
+    }
   ],
 })
 
