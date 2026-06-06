@@ -5,23 +5,26 @@
       <h1>Nueva Compra</h1>
       <form class="formulario-compra" @submit.prevent="registrarCompra">
         <label for="criptomoneda">Criptomoneda:</label>
-        <select id="criptomoneda" v-model="criptomoneda" required placeholder="Selecciona una criptomoneda">
+        <select id="criptomoneda" v-model="criptomoneda" required>
           <option value="" disabled>Selecciona una criptomoneda</option>
-          <option value="Bitcoin">Bitcoin</option>
-          <option value="Ethereum">Ethereum</option>
-          <option value="USDT">USDT</option>
+          <option value="btc">Bitcoin</option>
+          <option value="eth">Ethereum</option>
+          <option value="usdt">USDT</option>
         </select>
 
         <label for="cantidad">Cantidad:</label>
-        <input type="number" id="cantidad" v-model="cantidad" required>
+        <input type="number" id="cantidad" v-model="cantidad" step="any" min="0" required>
 
+      <!--
         <label for="cliente">Cliente:</label>
-        <select id="cliente" v-model="cliente" required placeholder="Selecciona un cliente">
+        
+        <select id="cliente" v-model="cliente" required>
           <option value="" disabled>Selecciona un cliente</option>
           <option value="Cliente 1">Cliente 1</option>
           <option value="Cliente 2">Cliente 2</option>
           <option value="Cliente 3">Cliente 3</option>
         </select>
+      -->
 
         <label for="fechayhora">Fecha y Hora:</label>
         <input type="datetime-local" id="fechayhora" v-model="fechayhora" required>
@@ -37,17 +40,37 @@
 <script setup>
 import { ref } from 'vue';
 import SidebarComp from '../components/sidebarComp.vue';
+import  { obtenerPrecioCripto }  from '../api/cryptoyaServices.js';
 
 const criptomoneda = ref('');
 const cantidad = ref(0);
-const cliente = ref('');
 const fechayhora = ref('');
 
-const registrarCompra = () => {
-  console.log(criptomoneda.value);
-  console.log(cantidad.value);
-  console.log(cliente.value);
-  console.log(fechayhora.value);
+const registrarCompra = async () => {
+  if(!criptomoneda.value || cantidad.value <= 0){
+    alert("Por favor, ingresa una criptomoneda")
+    return;
+  }
+  try{
+    const precioUnitario = await obtenerPrecioCripto(criptomoneda.value);
+    
+    if(precioUnitario){
+      const totalGastado = precioUnitario * cantidad.value;
+      console.log("Cripto seleccionada (código):", criptomoneda.value); 
+      console.log("Cantidad ingresada:", cantidad.value);
+      console.log("Precio unitario de Fiwind: $", precioUnitario);
+      console.log("Total calculado en ARS: $", totalGastado); 
+      console.log("Fecha y hora:", fechayhora.value);
+
+      alert(`Cotizacion obtenida. Total a gastar: $${totalGastado}`);
+    }
+    else{
+      alert("No se pudo obtener la cotizacion actual. Intenta de nuevo")
+    }
+  }
+  catch (error){
+    console.error("Error al procesar la compra:", error)
+  }
 }
 </script>
 

@@ -16,7 +16,12 @@ const router = createRouter({
       path: '/compras',
       name: 'compras',
       component: () => import('../views/AltaCompra.vue')
-    }
+    },
+    {
+      path: '/movimientos',
+      name: 'movimientos',
+      component: () => import('../views/MovimientosView.vue')
+    },
   ],
 })
 
