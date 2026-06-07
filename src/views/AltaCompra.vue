@@ -15,17 +15,6 @@
         <label for="cantidad">Cantidad:</label>
         <input type="number" id="cantidad" v-model="cantidad" step="any" min="0" required>
 
-      <!--
-        <label for="cliente">Cliente:</label>
-        
-        <select id="cliente" v-model="cliente" required>
-          <option value="" disabled>Selecciona un cliente</option>
-          <option value="Cliente 1">Cliente 1</option>
-          <option value="Cliente 2">Cliente 2</option>
-          <option value="Cliente 3">Cliente 3</option>
-        </select>
-      -->
-
         <label for="fechayhora">Fecha y Hora:</label>
         <input type="datetime-local" id="fechayhora" v-model="fechayhora" required>
       
@@ -40,7 +29,6 @@
 <script setup>
 import { ref } from 'vue';
 import SidebarComp from '../components/sidebarComp.vue';
-import  { obtenerPrecioCripto }  from '../api/cryptoyaServices.js';
 
 const criptomoneda = ref('');
 const cantidad = ref(0);
@@ -52,18 +40,12 @@ const registrarCompra = async () => {
     return;
   }
   try{
-    const precioUnitario = await obtenerPrecioCripto(criptomoneda.value);
-    
-    if(precioUnitario){
-      const totalGastado = precioUnitario * cantidad.value;
-      
-      const transaccionesParaGuardar = {
-        crypto_code: criptomoneda.value,
-        action : "purchase",
-        crypto_amount: cantidad.value,
-        money: totalGastado,
-        datetime: fechayhora.value
-      };
+    const transaccionesParaGuardar = {
+      crypto_code: criptomoneda.value,
+      action: "purchase",
+      crypto_amount: cantidad.value,
+      datetime: fechayhora.value
+    };
 
       const urlBackend = 'https://localhost:7222/transacciones';
 
@@ -76,17 +58,15 @@ const registrarCompra = async () => {
       });
 
       if(respuestaBackend.ok){
-        alert(`Compra registrada con exito en la base de datos. Total gastado: $${totalGastado}`)
+        const transaccionCreada = await respuestaBackend.json();
+        alert(`Compra registrada con exito en la base de datos. Total gastado: $${transaccionCreada.money}`)
+
         criptomoneda.value = '',
         cantidad.value = 0,
         fechayhora.value = '';
       }
       else{
         alert("Error al guardar en el servidor. Revisa la consola.");
-      }
-    }
-      else{
-        alert("No se pudo otener la cotizacion actual. Intenta de nuevo")
       }
     }
     catch (error){
