@@ -56,21 +56,42 @@ const registrarCompra = async () => {
     
     if(precioUnitario){
       const totalGastado = precioUnitario * cantidad.value;
-      console.log("Cripto seleccionada (código):", criptomoneda.value); 
-      console.log("Cantidad ingresada:", cantidad.value);
-      console.log("Precio unitario de Fiwind: $", precioUnitario);
-      console.log("Total calculado en ARS: $", totalGastado); 
-      console.log("Fecha y hora:", fechayhora.value);
+      
+      const transaccionesParaGuardar = {
+        crypto_code: criptomoneda.value,
+        action : "purchase",
+        crypto_amount: cantidad.value,
+        money: totalGastado,
+        datetime: fechayhora.value
+      };
 
-      alert(`Cotizacion obtenida. Total a gastar: $${totalGastado}`);
+      const urlBackend = 'https://localhost:7222/transacciones';
+
+      const respuestaBackend = await fetch(urlBackend, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(transaccionesParaGuardar)
+      });
+
+      if(respuestaBackend.ok){
+        alert(`Compra registrada con exito en la base de datos. Total gastado: $${totalGastado}`)
+        criptomoneda.value = '',
+        cantidad.value = 0,
+        fechayhora.value = '';
+      }
+      else{
+        alert("Error al guardar en el servidor. Revisa la consola.");
+      }
     }
-    else{
-      alert("No se pudo obtener la cotizacion actual. Intenta de nuevo")
+      else{
+        alert("No se pudo otener la cotizacion actual. Intenta de nuevo")
+      }
     }
-  }
-  catch (error){
-    console.error("Error al procesar la compra:", error)
-  }
+    catch (error){
+      console.error("Error al procesar la compra:", error)
+    }
 }
 </script>
 

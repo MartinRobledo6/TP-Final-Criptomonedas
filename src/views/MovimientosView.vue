@@ -16,22 +16,24 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="movimiento in movimientos" :key="movimiento.id">
-                <td>{{ formatearFecha(movimiento.datetime) }}</td>
-                <td class="crypto-badge">{{ movimiento.crypto_code.toUpperCase() }}</td>
-                <td :class="movimiento.action === 'purchase'? 'texto-compra' : 'texto-venta'">{{ movimiento.action === 'purchase' ? 'Compra' : 'Venta' }}</td>
-                <td>{{ movimiento.crypto_amount }}</td>
-                <td>${{ movimiento.money }}</td>
-                <td class="acciones">
-                  <button class="btn-ver">Ver</button>
-                  <button class="btn-editar">Editar</button>
-                  <button class="btn-borrar">Borrar</button>
-                </td>
-              </tr>
-              <tr v-if="movimientos.length === 0">
-                <td colspan="6" class="sin-datos">No hay movimientos registrados</td>
-              </tr>
-            </tbody>
+            <tr v-for="movimiento in movimientos" :key="movimiento.id">
+              <td>{{ formatearFecha(movimiento.datetime) }}</td>
+              <td class="crypto-badge">{{ movimiento.cryptoCode?.toUpperCase() }}</td>
+              <td :class="movimiento.action === 'purchase' ? 'texto-compra' : 'texto-venta'">
+                {{ movimiento.action === 'purchase' ? 'Compra' : 'Venta' }}
+              </td>
+              <td>{{ movimiento.cryptoAmount }}</td>
+              <td>$ {{ movimiento.money }}</td>
+              <td class="acciones">
+                <button class="btn-ver">Ver</button>
+                <button class="btn-editar">Editar</button>
+                <button class="btn-borrar">Borrar</button>
+              </td>
+            </tr>
+            <tr v-if="movimientos.length === 0">
+              <td colspan="6" class="sin-datos">No hay movimientos registrados.</td>
+            </tr>
+          </tbody>
           </table>
         </div>
       </div>
@@ -39,35 +41,34 @@
 </template>
 
 <script setup>
-  import { ref } from 'vue';
+  import { onMounted, ref } from 'vue';
   import sidebarComp from '../components/sidebarComp.vue';
 
-  const movimientos = ref([
-    {
-    id: "1",
-    action: "purchase",
-    crypto_code: "btc",
-    crypto_amount: "0.005",
-    money: "350000.00",
-    datetime: "2026-06-05T14:30"
-  },
-  {
-    id: "2",
-    action: "sale",
-    crypto_code: "eth",
-    crypto_amount: "0.1",
-    money: "120500.50",
-    datetime: "2026-06-06T10:15"
-  },
-  {
-    id: "3",
-    action: "purchase",
-    crypto_code: "usdt",
-    crypto_amount: "50",
-    money: "55000.00",
-    datetime: "2026-06-06T16:45"
-  }
-  ])
+  const movimientos = ref([]);
+
+  const cargarMovimientos = async () => {
+    try{
+      const urlBackend = 'https://localhost:7222/transacciones';
+
+      const respuesta = await fetch(urlBackend)
+
+      if(respuesta.ok){
+        const datos = await respuesta.json();
+
+        movimientos.value = datos;
+      }
+      else{
+        console.error("No se pudieron cargar los movimientos. Código de error:", respuesta.status)
+      }
+    } 
+      catch (error){
+        console.error("Error de red al intentar traer el historial:", error);
+      }
+    };
+  
+    onMounted(() =>{
+      cargarMovimientos();
+    });
 
   const formatearFecha = (fechaString) =>{
     if(!fechaString){
