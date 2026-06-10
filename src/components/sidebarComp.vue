@@ -1,6 +1,5 @@
 <template>
   <div class="dashboard">
-
     <div class="dashboard-header">
       <h1>Crypto<span>Wallet</span></h1>
     </div>
@@ -12,30 +11,28 @@
         <li><RouterLink to="/compras">Compras</RouterLink></li>
         <li><RouterLink to="/vender">Vender</RouterLink></li>
         <li><RouterLink to="/movimientos">Movimientos</RouterLink></li>
-        <li><RouterLink to="/analisis">Analisis</RouterLink></li>
+        <li><RouterLink to="/analisis">Analisis(opcional)</RouterLink></li>
       </ul>
     </div>
-
   </div>
 </template>
 
 <style scoped>
-
-a{
+a {
   color: white;
   text-decoration: none;
 }
 
-a:hover{
+a:hover {
   color: yellow;
   transition: 0.5s;
 }
 
-ul{
+ul {
   padding: 0;
 }
 
-li{
+li {
   list-style: none;
   margin-bottom: 50px;
   display: flex;
@@ -43,11 +40,11 @@ li{
   font-size: 20px;
 }
 
-span{
+span {
   color: yellow;
 }
 
-.dashboard{
+.dashboard {
   width: 200px;
   min-height: 100vh;
   background-color: #111827;
@@ -55,5 +52,4 @@ span{
   padding: 20px;
   border-radius: 10px;
 }
-
 </style>

@@ -5,22 +5,27 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      redirect: '/compras'
+      redirect: '/compras',
     },
     {
       path: '/clientes',
       name: 'clientes',
-      component: () => import('../views/AltaClientes.vue')
+      component: () => import('../views/AltaClientes.vue'),
     },
     {
       path: '/compras',
       name: 'compras',
-      component: () => import('../views/AltaCompra.vue')
+      component: () => import('../views/AltaCompra.vue'),
+    },
+    {
+      path: '/vender',
+      name: 'vender',
+      component: () => import('../views/AltaVenta.vue'),
     },
     {
       path: '/movimientos',
       name: 'movimientos',
-      component: () => import('../views/MovimientosView.vue')
+      component: () => import('../views/MovimientosView.vue'),
     },
   ],
 })
