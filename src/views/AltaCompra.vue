@@ -83,7 +83,6 @@ const registrarCompra = async () => {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
   border-radius: 10px;
   flex: 1;
   padding: 20px;
