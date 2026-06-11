@@ -25,9 +25,9 @@
               <td>{{ movimiento.cryptoAmount }}</td>
               <td>$ {{ movimiento.money }}</td>
               <td class="acciones">
-                <button class="btn-ver">Ver</button>
-                <button class="btn-editar">Editar</button>
-                <button class="btn-borrar">Borrar</button>
+                <button class="btn-ver" @click="VerMovimiento">Ver</button>
+                <button class="btn-editar" @click="EditarMovimiento">Editar</button>
+                <button class="btn-borrar" @click="EliminarMovimiento">Borrar</button>
               </td>
             </tr>
             <tr v-if="movimientos.length === 0">
