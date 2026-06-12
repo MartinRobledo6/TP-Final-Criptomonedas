@@ -10,6 +10,7 @@
           <option value="btc">Bitcoin</option>
           <option value="eth">Ethereum</option>
           <option value="usdt">USDT</option>
+          <option value="sol">Solana</option>
         </select>
 
         <label for="cantidad">Cantidad:</label>
