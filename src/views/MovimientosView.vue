@@ -42,7 +42,7 @@
         <p><strong>Cantidad:</strong> {{ movimientoActual.crypto_amount }}</p>
         <p><strong>Total pagado:</strong> $ {{ movimientoActual.money }}</p>
         <p>
-          <strong>Precio unitario:</strong> $
+          <strong>Precio:</strong> $
           {{ (movimientoActual.money / movimientoActual.crypto_amount).toFixed(2) }}
         </p>
 

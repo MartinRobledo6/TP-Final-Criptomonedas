@@ -36,8 +36,29 @@ const cantidad = ref(0)
 const fechayhora = ref('')
 
 const registrarCompra = async () => {
-  if (!criptomoneda.value || cantidad.value <= 0) {
-    alert('Por favor, ingresa una criptomoneda')
+  if (!criptomoneda.value) {
+    alert('Seleccione una criptomoneda')
+    return
+  }
+
+  if (!cantidad.value) {
+    alert('Ingrese una cantidad')
+    return
+  }
+
+  if (cantidad.value <= 0) {
+    alert('La cantidad debe ser mayor a cero')
+    return
+  }
+
+  if (!fechayhora.value) {
+    alert('Seleccione una fecha')
+    return
+  }
+  const fechaIngresada = new Date(fechayhora.value)
+
+  if (fechaIngresada > new Date()) {
+    alert('La fecha no puede ser futura')
     return
   }
   try {
