@@ -79,18 +79,14 @@
 import { ref } from 'vue'
 import sidebarComp from '../components/sidebarComp.vue'
 
-// Variables de estado
 const movimientos = ref([])
 const urlBase = 'https://localhost:7222/transacciones'
 
-// Variables para controlar qué panel se ve
 const mostrandoDetalle = ref(false)
 const mostrandoEdicion = ref(false)
 
-// Objeto que usamos tanto para ver como para editar
 const movimientoActual = ref({})
 
-// 1. TRAER TODOS LOS DATOS
 const cargarMovimientos = async () => {
   const respuesta = await fetch(urlBase)
   movimientos.value = await respuesta.json()
@@ -98,25 +94,21 @@ const cargarMovimientos = async () => {
 
 cargarMovimientos()
 
-// 2. BOTÓN VER: Busca por ID en la API y lo muestra
 const verDetalle = async (id) => {
   const respuesta = await fetch(`${urlBase}/${id}`)
   movimientoActual.value = await respuesta.json()
 
-  mostrandoEdicion.value = false // Oculto el otro por las dudas
-  mostrandoDetalle.value = true // Muestro este panel
+  mostrandoEdicion.value = false
+  mostrandoDetalle.value = true
 }
 
-// 3. BOTÓN EDITAR: Carga los datos en el formulario
 const abrirEdicion = (mov) => {
-  // Uso el spread operator (...) para hacer una copia y no editar la tabla en vivo
   movimientoActual.value = { ...mov }
 
-  mostrandoDetalle.value = false // Oculto el otro panel
-  mostrandoEdicion.value = true // Muestro el formulario
+  mostrandoDetalle.value = false 
+  mostrandoEdicion.value = true 
 }
 
-// 4. BOTÓN GUARDAR (PUT)
 const guardarCambios = async () => {
   await fetch(`${urlBase}/${movimientoActual.value.id}`, {
     method: 'PUT',
@@ -124,20 +116,18 @@ const guardarCambios = async () => {
     body: JSON.stringify(movimientoActual.value),
   })
 
-  mostrandoEdicion.value = false // Cierro el panel
-  cargarMovimientos() // Vuelvo a pedir la lista actualizada al backend
+  mostrandoEdicion.value = false 
+  cargarMovimientos() 
   alert('Actualizado!')
 }
 
-// 5. BOTÓN BORRAR (DELETE)
 const borrar = async (id) => {
   if (confirm('¿Borrar definitivo?')) {
     await fetch(`${urlBase}/${id}`, { method: 'DELETE' })
-    cargarMovimientos() // Refresco la tabla
+    cargarMovimientos() 
   }
 }
 
-// Formato de fecha básico
 const formatearFecha = (fechaOriginal) => {
   if (!fechaOriginal) return ''
   return new Date(fechaOriginal).toLocaleString()
